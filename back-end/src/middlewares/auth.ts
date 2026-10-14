@@ -2,7 +2,11 @@ import type { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 
 
-export const authMiddleware = (req: Request, res:Response, next: NextFunction) => {
+export const authMiddleware = (
+    req: Request,
+    res:Response,
+    next: NextFunction
+    ) => {
    const { user } = req.cookies; 
 
    if(!process.env.JWT_SECRET) {

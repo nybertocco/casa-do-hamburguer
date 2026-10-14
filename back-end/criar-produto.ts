@@ -11,12 +11,12 @@ const prisma = new PrismaClient({ adapter });
 async function main() {
   const produto = await prisma.product.create({
     data: {
-      name: "Vitamina de Morango",
+      name: "hhhhhhhhh",
       description:
-        "Cremosa mistura de morangos frescos, leite gelado e um toque de baunilha, batida na hora para uma textura perfeita.",
-      img: "vitamina-morango.png",
+        "ghhghgghhghg",
+      img: "ghghghghghg",
       price: 14,
-      category: "Bebida",
+      category: "Porção",
     },
   });
   console.log(produto);
