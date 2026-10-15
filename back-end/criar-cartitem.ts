@@ -12,7 +12,7 @@ async function main() {
   const item = await prisma.cartItem.create({
     data: {
       productId: "cmv5t0d030000h0u0wgrk5sjm",
-      userId: "ce0ca497-7cdd-4631-ac1d-727277ae8601",
+      userId: "0796f40e-fcfc-4f50-961e-e6b67696b726",
     },
   });
   console.log(item);

@@ -9,7 +9,7 @@ export const authMiddleware = (
     ) => {
    const { user } = req.cookies; 
 
-   if(!process.env.JWT_SECRET) {
+   if (!process.env.JWT_SECRET) {
     res.status(500).json({ message: "Erro no servidor" });
     return;
    }

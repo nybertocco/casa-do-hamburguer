@@ -5,5 +5,5 @@ export type ProductType = {
     price: number;
     img: string;
     category: string;
-    setProducts: React.Dispatch<React.SetStateAction<ProductType[]>>;
+    setProducts?: React.Dispatch<React.SetStateAction<ProductType[]>>;
 };
