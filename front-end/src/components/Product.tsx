@@ -81,7 +81,11 @@ const Product = ({
           </p>
           <div className="flex items-center justify-end gap-2">
             <p className="text-sm text-[#F2DAAC]">{formatterPrice(price)}</p>
-            <ShoppingBag size={18} className="cursor-pointer" />
+            <ShoppingBag
+              size={18}
+              className="cursor-pointer"
+              onClick={() => alert(id)}
+            />
           </div>
         </div>
       </div>
