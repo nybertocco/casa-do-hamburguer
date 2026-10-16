@@ -25,8 +25,8 @@ const Cart = ({ setShowCart }: CartTypeProps) => {
       }
 
       const data = await response.json();
-      setCartItems(data);
       console.log(data);
+      setCartItems(data);
     } catch (error) {
       console.log(error);
       return;
@@ -61,6 +61,7 @@ const Cart = ({ setShowCart }: CartTypeProps) => {
               title={item.product.name}
               price={item.product.price}
               img={item.product.img}
+              quantity={item.quantity}
               id={item.product.id}
             />
           ),
