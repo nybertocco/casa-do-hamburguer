@@ -13,6 +13,34 @@ const Cart = ({ setShowCart }: CartTypeProps) => {
   // const [cartItems, setCartItems] = useState<CartItemType[]>([]);
   const { cartItems, setCartItems } = useContext(CartItemContext);
 
+  async function handleCreateOrder() {
+    try {
+      const response = await fetch("http://localhost:3000/create-order", {
+        method: "POST",
+        credentials: "include",
+      });
+
+      if (cartItems.length === 0) {
+        console.log("Carrinho vazio");
+        return;
+      }
+
+      if (!response.ok) {
+        console.log("Erro ao finalizar pedido");
+        return;
+      }
+
+      setCartItems([]);
+
+      setShowCart(false);
+
+      console.log("Pedido realizado com sucesso");
+    } catch (err) {
+      console.log(err);
+      return;
+    }
+  }
+
   const getCartItems = async () => {
     try {
       const response = await fetch("http://localhost:3000/get-cart-items", {
@@ -50,6 +78,7 @@ const Cart = ({ setShowCart }: CartTypeProps) => {
       <div className="mt-10 flex flex-1 flex-col gap-2">
         {cartItems.map(
           (item: {
+            quantity: number;
             product: {
               id: string;
               name: string;
@@ -67,7 +96,7 @@ const Cart = ({ setShowCart }: CartTypeProps) => {
           ),
         )}
       </div>
-      <Button title="Finalizar pedido" />
+      <Button title="Finalizar pedido" onClick={handleCreateOrder} />
     </div>
   );
 };
