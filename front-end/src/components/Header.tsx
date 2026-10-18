@@ -5,6 +5,7 @@ import { LogOut, ShoppingCart, Box, LayoutDashboard, Plus } from "lucide-react";
 import Cart from "./Cart";
 import { CartItemContext } from "../contexts/CartItemsContext";
 
+import { API_URL } from "../config";
 const Header = () => {
   const [showCart, setShowCart] = useState<boolean>(false);
   const { user, setUser } = useContext(UserContext);
@@ -13,7 +14,7 @@ const Header = () => {
 
   const handleAuthUser = async () => {
     try {
-      const response = await fetch("http://localhost:3000/me", {
+      const response = await fetch(`${API_URL}/me`, {
         credentials: "include",
       });
 
@@ -33,7 +34,7 @@ const Header = () => {
 
   const handleLogout = async () => {
     try {
-      const response = await fetch("http://localhost:3000/logout", {
+      const response = await fetch(`${API_URL}/logout`, {
         credentials: "include",
         method: "POST",
       });
@@ -52,7 +53,7 @@ const Header = () => {
 
   const getCartItems = async () => {
     try {
-      const response = await fetch("http://localhost:3000/get-cart-items", {
+      const response = await fetch(`${API_URL}/get-cart-items`, {
         credentials: "include",
       });
 

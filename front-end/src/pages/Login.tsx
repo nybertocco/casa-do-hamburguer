@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router";
 import Button from "../components/Button";
 import { UserContext } from "../contexts/UserContext";
 
+import { API_URL } from "../config";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -22,7 +23,7 @@ const Login = () => {
         return;
       }
 
-      const response = await fetch("http://localhost:3000/login", {
+      const response = await fetch(`${API_URL}/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Product from "../components/Product";
 import type { ProductType } from "../types/Product";
 
+import { API_URL } from "../config";
 const Home = () => {
   const [category, setCategory] = useState("Hamburger");
   const [products, setProducts] = useState<ProductType[]>([]);
@@ -25,7 +26,7 @@ const Home = () => {
 
   const getProduct = async () => {
     try {
-      const response = await fetch("http://localhost:3000/get-products");
+      const response = await fetch(`${API_URL}/get-products`);
       console.log(response);
 
       if (!response.ok) {

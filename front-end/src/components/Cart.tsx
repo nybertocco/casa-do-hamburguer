@@ -4,9 +4,9 @@ import CartItem from "./CartItem";
 import { useContext, useEffect } from "react";
 import { CartItemContext } from "../contexts/CartItemsContext";
 
+import { API_URL } from "../config";
 type CartTypeProps = {
   setShowCart: React.Dispatch<React.SetStateAction<boolean>>;
-  showCart: boolean;
 };
 
 const Cart = ({ setShowCart }: CartTypeProps) => {
@@ -15,7 +15,7 @@ const Cart = ({ setShowCart }: CartTypeProps) => {
 
   async function handleCreateOrder() {
     try {
-      const response = await fetch("http://localhost:3000/create-order", {
+      const response = await fetch(`${API_URL}/create-order`, {
         method: "POST",
         credentials: "include",
       });
@@ -43,7 +43,7 @@ const Cart = ({ setShowCart }: CartTypeProps) => {
 
   const getCartItems = async () => {
     try {
-      const response = await fetch("http://localhost:3000/get-cart-items", {
+      const response = await fetch(`${API_URL}/get-cart-items`, {
         credentials: "include",
       });
 

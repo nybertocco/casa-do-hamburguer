@@ -5,17 +5,17 @@ import { UserContext } from "../contexts/UserContext";
 import { useContext } from "react";
 import { CartItemContext } from "../contexts/CartItemsContext";
 
+import { API_URL } from "../config";
 const Product = ({
   id,
   name,
   description,
   price,
   img,
-  category,
   setProducts,
 }: ProductProps) => {
   const { user } = useContext(UserContext);
-  const { cartItems, setCartItems } = useContext(CartItemContext);
+  const { setCartItems } = useContext(CartItemContext);
 
   const handleDeleteProduct = async (id: string) => {
     try {
@@ -25,7 +25,7 @@ const Product = ({
       }
 
       const response = await fetch(
-        `http://localhost:3000/delete-product/${id}`,
+        `${API_URL}/delete-product/${id}`,
         {
           method: "DELETE",
           credentials: "include",
@@ -49,7 +49,7 @@ const Product = ({
 
   const getProduct = async () => {
     try {
-      const response = await fetch("http://localhost:3000/get-products");
+      const response = await fetch(`${API_URL}/get-products`);
 
       const data = await response.json();
       setProducts(data);
@@ -61,7 +61,7 @@ const Product = ({
 
   const getCartItems = async () => {
     try {
-      const response = await fetch("http://localhost:3000/get-cart-items", {
+      const response = await fetch(`${API_URL}/get-cart-items`, {
         credentials: "include",
       });
 
@@ -81,7 +81,7 @@ const Product = ({
 
   const newCartItem = async () => {
     try {
-      const response = await fetch("http://localhost:3000/create-cart-item", {
+      const response = await fetch(`${API_URL}/create-cart-item`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
