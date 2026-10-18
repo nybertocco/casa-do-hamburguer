@@ -1,3 +1,2 @@
-# Troque pela URL do seu back-end no Render (sem barra no final)
-/api/*  https://SEU-BACKEND.onrender.com/:splat  200
-/*      /index.html                              200
+/api/*  https://casa-do-hamburguer-xhoh.onrender.com/:splat  200
+/*      /index.html                                          200
