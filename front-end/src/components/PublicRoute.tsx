@@ -1,24 +1,30 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { useNavigate } from "react-router";
+import { API_URL } from "../config";
 
 const PublicRoute = ({ children }: { children: ReactNode }) => {
   const [IsChecking, setIsChecking] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const cookie = document.cookie;
+    const checkLogin = async () => {
+      try {
+        const response = await fetch(`${API_URL}/me`, {
+          credentials: "include",
+        });
 
-    if (cookie) {
-      const cookies = cookie.split("; ");
-      const userCookie = cookies.find((c) => c.startsWith("user="));
-
-      if (userCookie) {
-        navigate("/", { replace: true });
-        return;
+        if (response.ok) {
+          navigate("/", { replace: true });
+          return;
+        }
+      } catch (error) {
+        console.log(error);
       }
-    }
 
-    setIsChecking(false);
+      setIsChecking(false);
+    };
+
+    checkLogin();
   }, [navigate]);
 
   if (IsChecking) {

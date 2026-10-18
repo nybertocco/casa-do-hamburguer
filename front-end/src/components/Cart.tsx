@@ -61,6 +61,32 @@ const Cart = ({ setShowCart }: CartTypeProps) => {
     }
   };
 
+  const changeQuantity = async (id: string, action: "inc" | "dec") => {
+    try {
+      await fetch(`${API_URL}/update-cart-item/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ action }),
+      });
+      getCartItems();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const removeItem = async (id: string) => {
+    try {
+      await fetch(`${API_URL}/delete-cart-item/${id}`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+      getCartItems();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     getCartItems();
   }, []);
@@ -70,7 +96,7 @@ const Cart = ({ setShowCart }: CartTypeProps) => {
       <div className="flex justify-between">
         <X
           className="cursor-pointer"
-          onClick={() => setShowCart(!setShowCart)}
+          onClick={() => setShowCart(false)}
         />
         <p className="font-bold uppercase">Meu carrinho</p>
       </div>
@@ -78,6 +104,7 @@ const Cart = ({ setShowCart }: CartTypeProps) => {
       <div className="mt-10 flex flex-1 flex-col gap-2">
         {cartItems.map(
           (item: {
+            id: string;
             quantity: number;
             product: {
               id: string;
@@ -87,11 +114,14 @@ const Cart = ({ setShowCart }: CartTypeProps) => {
             };
           }) => (
             <CartItem
+              key={item.id}
               title={item.product.name}
               price={item.product.price}
               img={item.product.img}
               quantity={item.quantity}
-              id={item.product.id}
+              id={item.id}
+              onChangeQuantity={changeQuantity}
+              onRemove={removeItem}
             />
           ),
         )}

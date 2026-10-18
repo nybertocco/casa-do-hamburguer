@@ -1,12 +1,15 @@
 import { CalendarFold, User, Watch } from "lucide-react";
+import { formatterPrice } from "../utils/formatter";
 
 type CardPedidoType = {
-  id: number;
+  id: string;
   name: string;
   date: string;
   orderTime: string;
-  deliveredTime?: string;
+  status: string;
+  items: { name: string; quantity: number }[];
   total: number;
+  onChangeStatus: (status: string) => void;
 };
 
 const CardPedido = ({
@@ -14,19 +17,23 @@ const CardPedido = ({
   name,
   date,
   orderTime,
-  deliveredTime,
+  status,
+  items,
   total,
+  onChangeStatus,
 }: CardPedidoType) => {
   return (
     <div className="rounded-md bg-[#F2DAAC] p-2 text-[#32343E]">
       <div className="flex justify-between">
-        <p className="font-bold">#{id}</p>
-        <select name="" id="" className="font-bold">
-          <option value="" defaultChecked disabled>
-            Pendente
-          </option>
-          <option value="">Retirado</option>
-          <option value="">Cancelado</option>
+        <p className="font-bold">#{id.slice(0, 6).toUpperCase()}</p>
+        <select
+          className="font-bold"
+          value={status}
+          onChange={(e) => onChangeStatus(e.target.value)}
+        >
+          <option value="Pendente">Pendente</option>
+          <option value="Retirado">Retirado</option>
+          <option value="Cancelado">Cancelado</option>
         </select>
       </div>
 
@@ -39,23 +46,22 @@ const CardPedido = ({
           <CalendarFold size={16} />
           <p className="text-xs">{date}</p>
         </div>
-
-        <div className="flex">
-          <div className="flex items-center gap-2">
-            <Watch size={16} />
-            <p className="text-xs">{orderTime}</p>
-          </div>
-          <div className="flex items-center gap-2">
-            <Watch size={16} />
-            <p className="text-xs">
-              {deliveredTime ? deliveredTime : "Não entregue"}
-            </p>
-          </div>
+        <div className="flex items-center gap-2">
+          <Watch size={16} />
+          <p className="text-xs">{orderTime}</p>
         </div>
+
+        <ul className="text-xs">
+          {items.map((item, index) => (
+            <li key={index}>
+              {item.quantity}x {item.name}
+            </li>
+          ))}
+        </ul>
 
         <div className="mt-1 h-[2px] w-full bg-[#32343E]"></div>
 
-        <p className="text-right text-lg font-bold">R${total}</p>
+        <p className="text-right text-lg font-bold">{formatterPrice(total)}</p>
       </div>
     </div>
   );

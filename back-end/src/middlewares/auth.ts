@@ -23,3 +23,18 @@ export const authMiddleware = (
        return;
    }
 };
+
+export const adminMiddleware = (
+    req: Request,
+    res: Response,
+    next: NextFunction
+    ) => {
+   const user: any = req.user;
+
+   if (!user?.admin) {
+       res.status(403).json({ message: "Acesso permitido apenas para administradores" });
+       return;
+   }
+
+   next();
+};

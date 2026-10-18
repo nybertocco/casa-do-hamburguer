@@ -7,9 +7,19 @@ type CartItemType = {
   img: string;
   quantity: number;
   id: string;
+  onChangeQuantity: (id: string, action: "inc" | "dec") => void;
+  onRemove: (id: string) => void;
 };
 
-const CartItem = ({ title, price, img, id, quantity }: CartItemType) => {
+const CartItem = ({
+  title,
+  price,
+  img,
+  id,
+  quantity,
+  onChangeQuantity,
+  onRemove,
+}: CartItemType) => {
   return (
     <div className="flex items-center gap-3">
       <img src={`./${img}`} alt="" className="w-[100px] rounded-md" />
@@ -23,16 +33,18 @@ const CartItem = ({ title, price, img, id, quantity }: CartItemType) => {
           <ChevronLeft
             className="cursor-pointer rounded-md bg-[#C92A0E] p-1 text-white"
             size={25}
+            onClick={() => onChangeQuantity(id, "dec")}
           />
           <p className="text-sm font-bold">{quantity}</p>
           <ChevronRight
             className="cursor-pointer rounded-md bg-[#C92A0E] p-1 text-white"
             size={25}
+            onClick={() => onChangeQuantity(id, "inc")}
           />
         </div>
       </div>
 
-      <Trash size={18} className="cursor-pointer" onClick={() => alert(id)} />
+      <Trash size={18} className="cursor-pointer" onClick={() => onRemove(id)} />
     </div>
   );
 };

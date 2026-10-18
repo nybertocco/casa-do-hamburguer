@@ -37,6 +37,7 @@ export const login = async (req: Request, res: Response) => {
     };
 
     if (!process.env.JWT_SECRET) {
+        res.status(500).json({ message: "Erro no servidor." });
         return;
     }
 
@@ -82,7 +83,13 @@ export const register = async (req: Request, res: Response) => {
             data: { name: name, email: email, password: hash, cep: cep },
         }); 
 
-      res.status(201).json(newUser);
+      res.status(201).json({
+          id: newUser.id,
+          name: newUser.name,
+          email: newUser.email,
+          cep: newUser.cep,
+          admin: newUser.admin,
+      });
     } catch (error) {
         res.status(500).json({ message: "Erro no servidor" });
         return;
@@ -101,12 +108,6 @@ export const auth = async (req: Request, res: Response) => {
 };
 
 export const logout = async (req: Request, res: Response) => {
-    const { user } = req.cookies;
-
-    if(user) {
-        res.clearCookie("user");
-        res.json({ message: "Usuário deslogado" });
-    }
-
-    console.log(user);
+    res.clearCookie("user");
+    res.json({ message: "Usuário deslogado" });
 };

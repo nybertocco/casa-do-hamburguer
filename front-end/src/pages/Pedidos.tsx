@@ -1,8 +1,61 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 import CardPedido from "../components/CardPedido";
+import { API_URL } from "../config";
+
+type OrderType = {
+  id: string;
+  status: string;
+  total: number;
+  createdAt: string;
+  user: { name: string };
+  order: { quantity: number; product: { name: string } }[];
+};
 
 const Pedidos = () => {
   const [category, setCategory] = useState("Pendente");
+  const [orders, setOrders] = useState<OrderType[]>([]);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const getOrders = async () => {
+      try {
+        const response = await fetch(`${API_URL}/get-orders`, {
+          credentials: "include",
+        });
+
+        if (!response.ok) {
+          navigate("/", { replace: true });
+          return;
+        }
+
+        setOrders(await response.json());
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    getOrders();
+  }, [navigate]);
+
+  const handleChangeStatus = async (id: string, status: string) => {
+    try {
+      const response = await fetch(`${API_URL}/update-order-status/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ status }),
+      });
+
+      if (!response.ok) return;
+
+      setOrders((prev) =>
+        prev.map((order) => (order.id === id ? { ...order, status } : order)),
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handleChangeCategory = (newCategory: string) => {
     setCategory(newCategory);
@@ -46,14 +99,27 @@ const Pedidos = () => {
       </div>
 
       <div className="grid grid-cols-3 gap-3">
-        <CardPedido
-          id={2}
-          name="Nycolas Bertocco"
-          date="27/12/2027"
-          orderTime="21:00"
-          deliveredTime="21:15"
-          total={124.75}
-        />
+        {orders
+          .filter((order) => order.status === category)
+          .map((order) => (
+            <CardPedido
+              key={order.id}
+              id={order.id}
+              name={order.user.name}
+              date={new Date(order.createdAt).toLocaleDateString("pt-BR")}
+              orderTime={new Date(order.createdAt).toLocaleTimeString("pt-BR", {
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
+              status={order.status}
+              items={order.order.map((item) => ({
+                name: item.product.name,
+                quantity: item.quantity,
+              }))}
+              total={order.total}
+              onChangeStatus={(status) => handleChangeStatus(order.id, status)}
+            />
+          ))}
       </div>
     </div>
   );

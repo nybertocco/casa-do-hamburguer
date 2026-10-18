@@ -22,8 +22,6 @@ export async function createOrder(req: Request, res: Response) {
         total += item.product.price * item.quantity;
     }
 
-    console.log(cartItems);
-
     const order = await prisma.order.create({
         data: {
             total,
@@ -46,4 +44,45 @@ export async function createOrder(req: Request, res: Response) {
     console.log(error);
     return res.status(500).json({ message: "Erro ao criar pedido" });
    }
+}
+
+export async function getOrders(req: Request, res: Response) {
+  try {
+    const orders = await prisma.order.findMany({
+      orderBy: { createdAt: "desc" },
+      include: {
+        user: { select: { name: true } },
+        order: { include: { product: { select: { name: true } } } },
+      },
+    });
+
+    res.json(orders);
+  } catch (error) {
+    res.status(500).json({ message: "Erro ao buscar pedidos" });
+  }
+}
+
+export async function updateOrderStatus(req: Request, res: Response) {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+
+    if (!["Pendente", "Retirado", "Cancelado"].includes(status)) {
+      res.status(400).json({ message: "Status inválido" });
+      return;
+    }
+
+    const order = await prisma.order.update({
+      where: { id: String(id) },
+      data: { status },
+    });
+
+    res.json(order);
+  } catch (error: any) {
+    if (error.code === "P2025") {
+      res.status(404).json({ message: "Pedido não encontrado" });
+      return;
+    }
+    res.status(500).json({ message: "Erro ao atualizar pedido" });
+  }
 }
