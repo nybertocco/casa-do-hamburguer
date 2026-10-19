@@ -4,3 +4,13 @@
 * {
     font-family: "Sen", sans-serif;
 }
+
+html,
+body {
+    background-color: #161410;
+}
+
+#root {
+    min-height: 100vh;
+    min-height: 100svh;
+}
